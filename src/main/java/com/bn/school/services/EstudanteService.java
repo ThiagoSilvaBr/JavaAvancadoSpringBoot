@@ -1,5 +1,7 @@
 package com.bn.school.services;
 
+//Camada da regra de negócio. Aqui é onde será colocada a inteligencia do sistema
+
 import com.bn.school.models.EstudanteModel;
 import com.bn.school.repositories.EstudanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;

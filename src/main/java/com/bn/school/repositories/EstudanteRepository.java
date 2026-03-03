@@ -1,3 +1,4 @@
+//Camada que conversa diretamente com o banco
 package com.bn.school.repositories;
 
 import com.bn.school.models.EstudanteModel;

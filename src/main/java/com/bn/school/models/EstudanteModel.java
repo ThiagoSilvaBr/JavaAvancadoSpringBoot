@@ -1,11 +1,11 @@
+//O Model representa os dados do sistema. Aqui ficam as classes que representam tabelas no banco
+
 package com.bn.school.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity // mapeando como entidade da tabela do banco do projeto
+@Table(name = "tb_aluno") // Utiliza para alterar o nome da tabela
 public class EstudanteModel {
 
     @Id // identifica como id
@@ -13,8 +13,11 @@ public class EstudanteModel {
     // atalho = GeneratedValue(), Ctrl+Space: strategy, Ctrl+Space: identity
 
     private Long id;
+    @Column(name = "estudanteNome")
     private String nome;
+    @Column(name = "estudanteEmail")
     private String email;
+    @Column(name = "estudanteIdade")
     private Integer idade;
 
     public EstudanteModel(){//SpringBoot precisa de contrutor vazio
