@@ -31,8 +31,8 @@ public class EstudanteModel {
         this.nome = nome;
     }
 
-    public void setEmai(String emai) {
-        this.email = emai;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setIdade(Integer idade) {
@@ -47,7 +47,7 @@ public class EstudanteModel {
         return nome;
     }
 
-    public String getEmai() {
+    public String getEmail() {
         return email;
     }
 
