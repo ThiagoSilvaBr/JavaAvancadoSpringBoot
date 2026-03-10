@@ -1,50 +1,59 @@
-
-//Camada que recebe requisiçao HTTP
-
 package com.bn.school.controllers;
 
 import com.bn.school.models.EstudanteModel;
 import com.bn.school.services.EstudanteService;
+import jakarta.servlet.Servlet;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-@RestController //indica que é a classe controller que recebe a url
-@RequestMapping("/estudantes") //mapeamento a ser feito na rota
+@RestController // informar que a classe sera o controlador - receber a url
+@RequestMapping("/estudantes") // mapeamento a ser feito na rota - localhost:8080/estudantes
+// server.port = 80*0 no application properties caso precise alterar a porta
 public class EstudanteController {
 
-    @Autowired//Caso não use, vem vazia e não vem as dependencias (injeta dependencia)
+    @Autowired // injeçao de dependencia
     private EstudanteService estudanteService;
 
-    //Mostrar todos os estudantes na lista
-    @GetMapping// Lista os dados, para mostrar que queremos utiliza-lo
-    public List<EstudanteModel> findAll(){
-        return estudanteService.findAll();
+    @GetMapping // informar que sera apenas uma busca
+    public ResponseEntity<List<EstudanteModel> > findAll() {
+        List<EstudanteModel> request = estudanteService.findAll();
+        return ResponseEntity.ok().body(request);
     }
 
-    //Criar estudantes na lista
-    @PostMapping// Setou que é um metodo de criação
-    public EstudanteModel criarEstudante(@RequestBody/* A requisição será pelo corpo*/ EstudanteModel estudanteModel){
-        return estudanteService.criarEstudante(estudanteModel);
+    @GetMapping("/{id}")
+    // optional é necessario para uma busca onde pode ter um resultado ou nao
+    public Optional<EstudanteModel> buscarPorId(@PathVariable Long id) {
+        return estudanteService.buscarPorId(id);
     }
 
-    //Deletar estudantes da lista
-    @DeleteMapping("/{id}")// Idenfica que irá deletar da tabela
-    public void deletarEstudante(@PathVariable/* A requisição será pela url*/ Long id){
-        estudanteService.deletarEstudante(id);
+    @PostMapping // informar que é um metodo de criaçao
+    public ResponseEntity<EstudanteModel> criarEstudante(@RequestBody EstudanteModel estudanteModel) { // RequestBody para informar que a requisicao HTTP sera pelo corpo
+        EstudanteModel request = estudanteService.criarEstudante(estudanteModel);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(request.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(request);
     }
 
-    //Buscar pelo id do estudante
-    @GetMapping("/{id}") //utilizado para buscar por id na url
-    public Optional<EstudanteModel> buscarPorId(@PathVariable Long id){
-        return estudanteService.procurarEstudantebyId(id);
-    }
-
-    //Dar Update no estudante
     @PutMapping("/{id}")
-    public EstudanteModel atualizarPorId(@PathVariable Long id,@RequestBody EstudanteModel estudanteModel){
-        return estudanteService.atualizarEstudante(id, estudanteModel);
+    public ResponseEntity<EstudanteModel> atualizarEstudante(@PathVariable Long id, @RequestBody EstudanteModel estudanteModel) { // o estudante sera passado pelo body
+        EstudanteModel request = estudanteService.atualizarEstudante(id, estudanteModel);
+        return ResponseEntity.status(201).body(estudanteModel);
     }
+
+    @DeleteMapping("/{id}")
+    // PathVariable para extrair valores da **URL** e passar como parametro para o metodo
+    public ResponseEntity<?> deletarEstudante(@PathVariable Long id) {
+        estudanteService.deletarEstudante(id);
+        return ResponseEntity.noContent().build(); // retornando um status
+    }
+
 }
