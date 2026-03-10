@@ -30,7 +30,7 @@ public class EstudanteController {
     @GetMapping("/{id}")
     // optional é necessario para uma busca onde pode ter um resultado ou nao
     public Optional<EstudanteModel> buscarPorId(@PathVariable Long id) {
-        return estudanteService.buscarPorId(id);
+        return estudanteService.procurarEstudantebyId(id);
     }
 
     @PostMapping // informar que é um metodo de criaçao
